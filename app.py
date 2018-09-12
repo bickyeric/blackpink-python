@@ -48,7 +48,8 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
 	try:
-		unhandledMessage(event)
+		print("a")
+		#unhandledMessage(event)
 	except Exception as e:
 		app.logger.warning("error detected")
 
