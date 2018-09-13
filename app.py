@@ -15,8 +15,8 @@ from linebot.models import *
 app = Flask(__name__)
 
 # botPush
-channel_secret = os.environ['ChannelSecret']
-channel_access_token = os.environ['ChannelAccessToken']
+channel_secret = "aec84c00470f6e611f51bbba6ebe480f"
+channel_access_token = "Af9k0NXnZvqlGIZZEoc3lIRKgXha2n0ZU7G3LjJS2VnR6Vrfi9tppk3aoVFIayBn21/3WTjKh9chxWy+geVTl0yAmbNOGmT8WhVyBKw7jKAeYatGQVDcUzUccP0K2Byc39PV7aRfpUjHlbrQRxM/OQdB04t89/1O/w1cDnyilFU="
 
 line_bot_api = LineBotApi(channel_access_token)
 handler = WebhookHandler(channel_secret)
@@ -32,13 +32,14 @@ def unhandledMessage(event):
 
 def shareProfileMessage(event):
 	username = event.message.text.split(" ")[2]
-	response = requests("https://api.github.com/users/{}".format(username))
+	response = requests.get("https://api.github.com/users/{}".format(username))
 	data = response.json()
+	app.logger.info(data)
 	if response.status_code == 200:
 		line_bot_api.reply_message(
 			event.reply_token,
 			TextSendMessage(
-				text = "fullName = {}\ncompany = {}\nlocation = {}\nfollowers = {}\nfollowing = {}\npublic repo = {}\npublic gist = {}\n".format(data['name'], data['company'], data['location'], data['followers'], data['following'], data['public_repos'], data['public_gist']) 
+				text = "fullName = {}\ncompany = {}\nlocation = {}\nfollowers = {}\nfollowing = {}\npublic repo = {}\npublic gist = {}\n".format(data['name'], data['company'], data['location'], data['followers'], data['following'], data['public_repos'], data['public_gists']) 
 			)
 		)
 	else:
@@ -70,13 +71,14 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
+	app.logger.info(event)
 	try:
 		if "Cari profil" in event.message.text:
 			shareProfileMessage(event)
 		else:
 			unhandledMessage(event)
 	except Exception as e:
-		app.logger.warning("error detected")
+		app.logger.warning("error detected " + e.message)
 
 if __name__ == "__main__":
 	app.run(debug=True)
