@@ -1,6 +1,7 @@
 import logging
 import requests
 import os
+import requests
 
 from flask import Flask, request, abort
 from linebot import (
@@ -27,6 +28,28 @@ def unhandledMessage(event):
 			text="ini ma contoh aja ih!!!!"
 		)
 	)
+
+
+def shareProfileMessage(event):
+	username = event.message.text.split(" ")[2]
+	response = requests("https://api.github.com/users/{}".format(username))
+	data = response.json()
+	if response.status_code == 200:
+		line_bot_api.reply_message(
+			event.reply_token,
+			TextSendMessage(
+				text = "fullName = {}\ncompany = {}\nlocation = {}\nfollowers = {}\nfollowing = {}\npublic repo = {}\npublic gist = {}\n".format(data['name'], data['company'], data['location'], data['followers'], data['following'], data['public_repos'], data['public_gist']) 
+			)
+		)
+	else:
+		line_bot_api.reply_message(
+			event.reply_token,
+			TextSendMessage(
+				text = "Tidak ditemukan"
+			)
+		)
+	
+
 @app.route("/callback", methods=['POST'])
 def callback():
 	signature = request.headers['X-Line-Signature']
@@ -48,8 +71,10 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
 	try:
-		print("a")
-		#unhandledMessage(event)
+		if "Cari profil" in event.message:
+			shareProfileMessage(event)
+		else:
+			unhandledMessage(event)
 	except Exception as e:
 		app.logger.warning("error detected")
 
