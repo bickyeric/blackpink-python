@@ -71,7 +71,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
 	try:
-		if "Cari profil" in event.message:
+		if "Cari profil" in event.message.text:
 			shareProfileMessage(event)
 		else:
 			unhandledMessage(event)
