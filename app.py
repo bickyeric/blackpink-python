@@ -75,8 +75,8 @@ def message_text(event):
 	try:
 		if "Cari profil" in event.message.text:
 			shareProfileMessage(event)
-		else:
-			unhandledMessage(event)
+		#else:
+		#	unhandledMessage(event)
 	except Exception as e:
 		app.logger.warning("error detected " + e.message)
 
