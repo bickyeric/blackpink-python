@@ -65,10 +65,10 @@ def callback():
 def message_text(event):
 	app.logger.info(event)
 	try:
-		# if "Cari profil" in event.message.text:
-		# 	shareProfileMessage(event)
+		if "Cari profil" in event.message.text:
+			shareProfileMessage(event)
 		# #else:
-		unhandledMessage(event)
+		# unhandledMessage(event)
 	except Exception as e:
 		app.logger.warning("error detected " + e.message)
 
