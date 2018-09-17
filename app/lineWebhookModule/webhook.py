@@ -12,8 +12,8 @@ from linebot.models import *
 
 lineBlueprint = Blueprint('lineWebhook', __name__)
 
-line_bot_api = LineBotApi(app.config["channel_secret"])
-handler = WebhookHandler(app.config["channel_access_token"])
+line_bot_api = LineBotApi(app.config["channel_access_token"])
+handler = WebhookHandler(app.config["channel_secret"])
 
 def unhandledMessage(event):
 	line_bot_api.reply_message(
