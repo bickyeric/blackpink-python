@@ -59,6 +59,8 @@ def callback():
   finally:
     app.logger.info("Finished!!!")
 
+  return "OK", 200
+
 @handler.add(MessageEvent, message=TextMessage)
 def message_text(event):
 	app.logger.info(event)
