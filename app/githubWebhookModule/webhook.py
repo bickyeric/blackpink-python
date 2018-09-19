@@ -23,7 +23,6 @@ def callback():
 
       message = actor + " telah membuat branch baru namanya " + refName + " dari branch " + refMaster + " : " + refLink+"/tree/"+refName
       line_bot_api.push_message(app.config["roomId"], TextSendMessage(text=message))
-      print message
   elif eventType == 'pull_request':
 
     # seseorang sedang melakukan pull request
@@ -35,6 +34,5 @@ def callback():
 
       message = "si " + actor + " udah bikin pull request dari " + headRepo + " ke " + baseRepo + ", tolong di review ya, ini link nya " + link
       line_bot_api.push_message(app.config["roomId"], TextSendMessage(text=message))
-      print message
 
   return "OK", 200
