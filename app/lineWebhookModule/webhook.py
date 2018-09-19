@@ -1,9 +1,9 @@
 # app/lineWebhookModule
 import requests
 
-from app import app
+from app import app, line_bot_api
 from flask import Blueprint, request
-from linebot import WebhookHandler, LineBotApi
+from linebot import WebhookHandler
 from linebot.exceptions import (
     InvalidSignatureError, LineBotApiError
 )
@@ -12,7 +12,6 @@ from linebot.models import *
 
 lineBlueprint = Blueprint('lineWebhook', __name__)
 
-line_bot_api = LineBotApi(app.config["channel_access_token"])
 handler = WebhookHandler(app.config["channel_secret"])
 
 def unhandledMessage(event):
