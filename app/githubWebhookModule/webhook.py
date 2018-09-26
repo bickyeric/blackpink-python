@@ -34,5 +34,31 @@ def callback():
 
       message = "si " + actor + " udah bikin pull request dari " + headRepo + " ke " + baseRepo + ", tolong di review ya, ini link nya " + link
       line_bot_api.push_message(app.config["roomId"], TextSendMessage(text=message))
+  elif eventType == 'repository':
+
+    if data['action'] == 'unarchived':
+      repoName = data['repository']['name']
+      repoLink = data['repository']['html_url']
+
+      message = "Alhamdulillah ya repository " + repoName + " udah aktif lagi, yuk kita berkontribusi lagi. cek linknya di + " + repoLink
+      line_bot_api.push_message(app.config["roomId"], TextSendMessage(text=message))
+    elif data['action'] == 'archived':
+      repoName = data['repository']['name']
+      repoLink = data['repository']['html_url']
+
+      message = "ALERT\nRepository " + repoName + " telah diarchive, tapi masih bisa diakses kok.\n makasih ya udah bersama-sama berkontribusi di repo tersebut. cek linknya di " + repoLink
+      line_bot_api.push_message(app.config["roomId"], TextSendMessage(text=message))
+
+  elif eventType == 'pull_request_review':
+
+    if data['action'] == 'submitted':
+      repoName = data['repository']['name']
+      prName = data['pull_request']['title']
+      prReviewLink = data['review']['html_url']
+
+      message = "Ada review tuh buat Pull Request + " + prName + " di Repository " + repoName + ", yang bersangkutan jangan lupa cek ya di " + prReviewLink
+      line_bot_api.push_message(app.config["roomId"], TextSendMessage(text=message))
+  else:
+    print(eventType+ " belum ada handlernya ih")
 
   return "OK", 200
